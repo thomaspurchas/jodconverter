@@ -22,15 +22,22 @@ package org.artofsolving.jodconverter.document;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 public class DefaultDocumentFormatRegistry extends SimpleDocumentFormatRegistry {
 
 	public DefaultDocumentFormatRegistry() {
 		DocumentFormat pdf = new DocumentFormat("Portable Document Format", "pdf", "application/pdf");
-		pdf.setStoreProperties(DocumentFamily.TEXT, Collections.singletonMap("FilterName", "writer_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.SPREADSHEET, Collections.singletonMap("FilterName", "calc_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.PRESENTATION, Collections.singletonMap("FilterName", "impress_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.DRAWING, Collections.singletonMap("FilterName", "draw_pdf_Export"));
+                Map<String, Object> pdfProperties = new HashMap<String, Object>();
+                Map<String, Object> pdfFilterData = new HashMap<String, Object>();
+                pdfFilterData.put("SelectPdfVersion", 1); // 1 Will produce PDF/A files, 0 normal PDF
+                pdfProperties.put("FilterData", pdfFilterData);
+                pdfProperties.put("FilterName", "writer_pdf_Export");
+		pdf.setStoreProperties(DocumentFamily.TEXT, new HashMap(pdfProperties));
+                pdfProperties.put("FilterName", "calc_pdf_Export");
+		pdf.setStoreProperties(DocumentFamily.SPREADSHEET, new HashMap(pdfProperties));
+                pdfProperties.put("FilterName", "impress_pdf_Export");
+		pdf.setStoreProperties(DocumentFamily.PRESENTATION, new HashMap(pdfProperties));
 		addFormat(pdf);
 		
 		DocumentFormat swf = new DocumentFormat("Macromedia Flash", "swf", "application/x-shockwave-flash");
