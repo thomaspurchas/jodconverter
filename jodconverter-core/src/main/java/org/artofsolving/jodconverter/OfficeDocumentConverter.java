@@ -74,11 +74,22 @@ public class OfficeDocumentConverter {
         convert(inputFile, outputFile, outputFormat,
                 new HashMap<String, Serializable>());
     }
-
-    public void convert(File inputFile, File outputFile,
+    
+    public void convert(File inputFile, DocumentFormat inputFormat, File outputFile,
+            DocumentFormat outputFormat) {
+        convert(inputFile, inputFormat, outputFile, outputFormat,
+                new HashMap<String, Serializable>());
+    }
+    
+    public void convert(File inputFile, File outputFile, 
             DocumentFormat outputFormat, Map<String, Serializable> params) {
         String inputExtension = FilenameUtils.getExtension(inputFile.getName());
         DocumentFormat inputFormat = formatRegistry.getFormatByExtension(inputExtension);
+        convert(inputFile, inputFormat, outputFile, outputFormat, params);
+    }
+
+    public void convert(File inputFile, DocumentFormat inputFormat, File outputFile,
+            DocumentFormat outputFormat, Map<String, Serializable> params) {
         StandardConversionTask conversionTask = new StandardConversionTask(
                 inputFile, outputFile, outputFormat, params);
         conversionTask.setDefaultLoadProperties(defaultLoadProperties);
